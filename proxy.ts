@@ -15,12 +15,8 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (path.startsWith("/api") && !path.startsWith("/api/auth") && !token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/login"],
 };
