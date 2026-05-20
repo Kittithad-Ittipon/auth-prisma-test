@@ -31,7 +31,7 @@ export default function Footer() {
       </div>
       <div className="text-white flex justify-center items-center text-[10px] md:text-sm xl:text-sm xl:font-[500] gap-3">
         <FaRegCopyright className="text-white cursor-pointer h-4 w-4" />
-        <p>1.0.0</p>
+        <p>1.0.1</p>
         <p>
           Kittithad Ittipon 2026
         </p>
