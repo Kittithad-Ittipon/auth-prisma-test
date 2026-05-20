@@ -59,6 +59,10 @@ export const authOptions: NextAuthOptions = {
           const existingUser = await prisma.user.findUnique({
             where: { email: user.email! },
           });
+          if (existingUser && existingUser.isActive === false) {
+            console.log("User is inactive");
+            return false;
+          }
           if (!existingUser) {
             await prisma.user.create({
               data: {
@@ -69,10 +73,6 @@ export const authOptions: NextAuthOptions = {
                 isActive: true,
               },
             });
-          }
-          if (existingUser && existingUser.isActive === false) {
-            console.log("User is inactive");
-            return false;
           }
           return true;
         } catch (error) {
@@ -93,6 +93,15 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      if (token?.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+          select: { isActive: true },
+        });
+        if (!dbUser || dbUser.isActive === false) {
+          throw new Error("User is inactive");
+        }
+      }
       if (token && session.user) {
         // @ts-ignore
         session.user.id = token.id;
