@@ -6,19 +6,34 @@ export async function GET(request: Request) {
   const secret = searchParams.get("secret");
 
   if (secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: "Authentication failed" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Authentication failed" },
+      { status: 401 },
+    );
   }
   try {
-    await prisma.$queryRaw`SELECT 1`; 
-    return NextResponse.json({ 
-      success: true, 
-      message: "Database connection is healthy" 
+    await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        isActive: true,
+        provider: true,
+      },
+      orderBy: { id: "asc" },
+    });
+    return NextResponse.json({
+      success: true,
+      message: "Database connection is healthy",
     });
   } catch (error) {
     console.error("Keep-alive failed:", error);
-    return NextResponse.json({ 
-      success: false, 
-      error: "Failed to connect to database" 
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to connect to database",
+      },
+      { status: 500 },
+    );
   }
 }
