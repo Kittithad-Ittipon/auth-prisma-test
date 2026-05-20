@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/keep-alive?secret=SuperSecretKey",
+      "schedule": "0 */4 * * *"
+    }
+  ]
+}
