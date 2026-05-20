@@ -70,6 +70,10 @@ export const authOptions: NextAuthOptions = {
               },
             });
           }
+          if (existingUser && existingUser.isActive === false) {
+            console.log("User is inactive");
+            return false;
+          }
           return true;
         } catch (error) {
           console.error("Error during Google sign-in:", error);
